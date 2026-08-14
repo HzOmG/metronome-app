@@ -3,36 +3,34 @@ on: push
 
 jobs:
   build:
-    runs‑on: ubuntu‑latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 直接下载gradle‑wrapper.jar，不再调用gradle wrapper命令
-      - name: Fetch gradle‑wrapper.jar
+      - name: Fetch gradle-wrapper.jar
         run: |
-          wget https://services.gradle.org/distributions/gradle‑8.9‑bin.zip
-          unzip gradle‑8.9‑bin.zip gradle‑8.9/lib/gradle‑wrapper.jar
-          mv gradle‑8.9/lib/gradle‑wrapper.jar gradle/wrapper/
-          rm ‑rf gradle‑8.9 gradle‑8.9‑bin.zip
+          wget https://services.gradle.org/distributions/gradle-8.9-bin.zip
+          unzip gradle-8.9-bin.zip gradle-8.9/lib/gradle-wrapper.jar
+          mv gradle-8.9/lib/gradle-wrapper.jar gradle/wrapper/
+          rm -rf gradle-8.9 gradle-8.9-bin.zip
 
-      # 下载gradlew脚本
       - name: Fetch gradlew shell script
         run: |
           wget https://raw.githubusercontent.com/gradle/gradle/v8.9.0/gradlew
           chmod +x gradlew
 
       - name: Setup JDK17
-        uses: actions/setup‑java@v4
+        uses: actions/setup-java@v4
         with:
-          java‑version: '17'
+          java-version: '17'
           distribution: temurin
 
       - name: Compile Debug APK
         run: ./gradlew assembleDebug
 
       - name: Upload built APK
-        uses: actions/upload‑artifact@v4
+        uses: actions/upload-artifact@v4
         with:
-          name: metronome‑apk
+          name: metronome-apk
           path: app/build/outputs/apk/debug/*.apk
